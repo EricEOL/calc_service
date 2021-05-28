@@ -11,7 +11,7 @@ export default (req, res) => {
     if (scale === 'preta') {
 
       if(isSaturday(formattedDate) === true || isSunday(formattedDate) === true) {
-        res.json({response: 'Você escolheu escala preta, entretetanto a data do seu último serviço é um sábado ou domingo. Corrija por favor.'});
+        res.json({response: 'Você escolheu escala preta, entretanto, a data do seu último serviço é um sábado ou domingo.'});
         return;
       }
 
@@ -40,7 +40,7 @@ export default (req, res) => {
     } else {
 
       if(isSaturday(formattedDate) === false && isSunday(formattedDate) === false) {
-        res.json({response: 'Você escolheu escala vermelha, entretetanto a data do seu último serviço é um dia útil. Corrija por favor.'});
+        res.json({response: 'Você escolheu escala vermelha, entretanto, a data do seu último serviço é um dia útil.'});
         return;
       }
 

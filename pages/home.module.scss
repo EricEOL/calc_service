@@ -1,40 +1,101 @@
 .homeHeader {
   width: 100vw;
-  background-color: gray;
 
-  padding: 10px;
-  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
+  margin-bottom: 30px;
   text-align: center;
 
   h1 {
+    width: 95vw;
+    margin: 10px 0 0;
     font-size: 30px;
+    color: #fff;
+    background-color: #3d524c;
+    padding: 5px;
+    border-radius: 8px 8px 0 0;
+  }
+
+  span {
+    width: 95vw;
+    color: #fff;
+    background-color: #688D82;
+    padding: 5px;
+    border-radius: 0 0 8px 8px;
   }
 }
 
 .homeMain {
   text-align: center;
 
+  .response {
+    margin: 5px auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    width: 95vw;
+  }
+
+  @mixin inline-animation($duration) {
+    $name: inline-#{unique-id()};
+  
+    @keyframes #{$name} {
+      @content;
+    }
+  
+    animation-name: $name;
+    animation-duration: $duration;
+    animation-iteration-count: infinite;
+    animation-play-state: inherit;
+    animation-timing-function: linear;
+  }
+
+  .loading {
+    @include inline-animation(0.5s) {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    margin: 0 auto;
+
+    border: 5px solid #DCE5E2;
+    border-bottom-color: #3d524c;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+  }
+
   form {
     margin: auto;
-    width: 200px;
+    width: 70vw;
 
     .divInput {
       display: flex;
       flex-direction: column;
-      margin-top: 20px;
+      width: 70vw;
+      margin-top: 15px;
+      padding: 5px;
+      background-color: #C4D4CF;
+      border-radius: 4px;
 
       input {
-        width: 200px;
+        width: 100%;
         height: 35px;
+        margin-top: 5px;
+        border: none;
+        border-radius: 4px;
       }
 
       .scaleButtons {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-evenly;
 
         .activeButton {
           filter: brightness(1);
+          border-radius: 4px;
         }
 
         button {
@@ -44,11 +105,15 @@
           border: none;
           border-radius: 4px;
           color: #fff;
+          text-transform: uppercase;
+          font-size: 11px;
           font-weight: bold;
-          filter: brightness(0.6);
-          background-color: black;
-
+          filter: brightness(0.5);
+          background-color: #000;
+          
           cursor: pointer;
+
+          transition: 0.2s;
 
           &:last-child {
             background-color: red;
@@ -58,11 +123,32 @@
     }
 
     button[type="submit"] {
-      width: 200px;
-      height: 35px;
+      width: 70vw;
+      height: 40px;
 
       margin: 20px 0 10px 0;
       cursor: pointer;
+
+      background-color: #48AD59;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 1px;
+      font-weight: bold;
+
+      transition: 0.2s;
+
+      &:hover {
+        filter: brightness(1.2);
+      }
+
+      &:disabled {
+        filter: brightness(0.6);
+        cursor: not-allowed;
+      }
     }
   }
 }

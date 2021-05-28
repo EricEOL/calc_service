@@ -8,9 +8,17 @@ export default function Home() {
   const [quantity, setQuantity] = useState('');
   const [scale, setScale] = useState('');
   const [nextService, setNextService] = useState('');
+  const [screenState, setScreenState] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    if((date === '') || (quantity === '') || (scale === '')) {
+      setNextService('Você não preencheu todos os campos.');
+      return;
+    }
+
+    setScreenState(true);
 
     const data = {
       date,
@@ -20,7 +28,11 @@ export default function Home() {
 
     const response = await api.post('calculator', data);
 
-    setNextService(response.data.response);
+    setTimeout(() => {
+      setNextService(response.data.response);
+
+      setScreenState(false);
+    }, 3000)
   }
 
   return (
@@ -63,10 +75,13 @@ export default function Home() {
             </div>
           </div>
 
-          <button type="submit" disabled={!scale && true}>Calcular</button>
+          <button type="submit" disabled={!scale && true} onClick={() => setNextService('')}>Calcular</button>
         </form>
 
-        {!!nextService && <strong>{nextService}</strong>}
+
+        {!!screenState && <div className={styles.loading}></div>}
+
+        {!!nextService && <p className={styles.response}>{nextService}</p>}
 
       </main>
     </>
