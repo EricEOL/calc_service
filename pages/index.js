@@ -20,7 +20,7 @@ export default function Home() {
 
     const response = await api.post('calculator', data);
 
-    setNextService(response.data.nextService);
+    setNextService(response.data.response);
   }
 
   return (
@@ -38,12 +38,21 @@ export default function Home() {
 
           <div className={styles.divInput}>
             <label>Qual foi o último serviço que você tirou ?</label>
-            <input type="date" name="date" onChange={(event) => setDate(event.target.value)} />
+            <input 
+              type="date" 
+              name="date" 
+              onChange={(event) => setDate(event.target.value)} 
+            />
           </div>
 
           <div className={styles.divInput}>
             <label>Existem quantos militares na sua escala ?</label>
-            <input type="number" name="quantity" onChange={(event) => setQuantity(event.target.value)} />
+            <input 
+              type="number" 
+              name="quantity" 
+              onChange={(event) => setQuantity(event.target.value)} 
+              placeholder="Inclusive você"
+            />
           </div>
 
           <div className={styles.divInput}>
@@ -54,7 +63,7 @@ export default function Home() {
             </div>
           </div>
 
-          <button type="submit">Calcular</button>
+          <button type="submit" disabled={!scale && true}>Calcular</button>
         </form>
 
         {!!nextService && <strong>{nextService}</strong>}

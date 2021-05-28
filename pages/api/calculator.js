@@ -1,4 +1,5 @@
 import { add, parseISO, isSaturday, isSunday, format } from 'date-fns';
+import localePtBr from 'date-fns/locale/pt-BR';
 
 export default (req, res) => {
   if (req.method === 'POST') {
@@ -8,6 +9,11 @@ export default (req, res) => {
     const formattedDate = parseISO(date);
 
     if (scale === 'preta') {
+
+      if(isSaturday(formattedDate) === true || isSunday(formattedDate) === true) {
+        res.json({response: 'Você escolheu escala preta, entretetanto a data do seu último serviço é um sábado ou domingo. Corrija por favor.'});
+        return;
+      }
 
       let workingDays = Number(quantity);
       let nextService = add(formattedDate, {
@@ -27,16 +33,42 @@ export default (req, res) => {
         workingDays = workingDays - 1;
       }
 
-      nextService = format(nextService, 'dd/MM/yyyy');
+      const response = format(nextService, 'dd/MM/yyyy - (EEEE)', {locale: localePtBr});
 
-      res.json({ nextService });
+      res.json({ response });
 
     } else {
-      res.json({ nextService: 'Escala vermelha.' })
+
+      if(isSaturday(formattedDate) === false && isSunday(formattedDate) === false) {
+        res.json({response: 'Você escolheu escala vermelha, entretetanto a data do seu último serviço é um dia útil. Corrija por favor.'});
+        return;
+      }
+
+      let weekendDays = Number(quantity);
+      let nextService = add(formattedDate, {
+        days: -1
+      })
+
+      while (weekendDays >= 0) {
+
+        nextService = add(nextService, {
+          days: 1
+        })
+
+        if (isSaturday(nextService) === true || isSunday(nextService) === true) {
+          weekendDays = weekendDays - 1;
+        }
+
+        weekendDays = weekendDays;
+      }
+
+      const response = format(nextService, 'dd/MM/yyyy - (EEEE)', {locale: localePtBr});
+
+      res.json({ response })
     }
 
   } else {
-    res.json({ error: 'O sistema só aceita requisições POST.' })
+    res.json({ response: 'O sistema só aceita requisições POST.' })
   }
 
 }
