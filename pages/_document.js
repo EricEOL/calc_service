@@ -8,7 +8,6 @@ export default class MyDocuments extends Document {
                     <link rel="preconnect" href="https://fonts.gstatic.com" />
                     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
                     <link rel="icon" type="image/png" href="/favicon/calendar.png" />
-                    <title>Calculadora de Serviço</title>
                 </Head>
                     <body>
                         <Main />

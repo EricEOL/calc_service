@@ -1,9 +1,12 @@
+import Head from 'next/head';
 import { useState } from 'react';
 import { api } from '../services/api';
+import ufs from '../utils/ufs.json';
 import styles from './home.module.scss';
 
 export default function Home() {
 
+  const [state, setState] = useState('RJ');
   const [date, setDate] = useState('');
   const [quantity, setQuantity] = useState('');
   const [scale, setScale] = useState('');
@@ -13,7 +16,7 @@ export default function Home() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if((date === '') || (quantity === '') || (scale === '')) {
+    if ((date === '') || (quantity === '') || (scale === '') || (state === '')) {
       setNextService('Você não preencheu todos os campos.');
       return;
     }
@@ -21,6 +24,7 @@ export default function Home() {
     setScreenState(true);
 
     const data = {
+      state,
       date,
       quantity,
       scale
@@ -37,6 +41,8 @@ export default function Home() {
 
   return (
     <>
+      <Head><title>Calculadora de Serviço</title></Head>
+
       <header className={styles.homeHeader}>
         <h1>Calculadora de Serviço</h1>
         <span>Descubra qual será seu próximo serviço</span>
@@ -44,25 +50,34 @@ export default function Home() {
 
       <main className={styles.homeMain}>
 
-        <strong>Nós precisamos de algumas informações para realizar o cálculo</strong>
+        <strong>São necessárias algumas informações para realizar o cálculo</strong>
 
         <form onSubmit={handleSubmit}>
 
           <div className={styles.divInput}>
+            <label>Qual é o Estado(UF) ?</label>
+            <select name="ufs" defaultValue="RJ" onChange={(event) => setState(event.target.value)}>
+              {ufs.uf.map(uf => (
+                <option key={uf.nome} value={uf.sigla}>{uf.sigla}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className={styles.divInput}>
             <label>Qual foi o último serviço que você tirou ?</label>
-            <input 
-              type="date" 
-              name="date" 
-              onChange={(event) => setDate(event.target.value)} 
+            <input
+              type="date"
+              name="date"
+              onChange={(event) => setDate(event.target.value)}
             />
           </div>
 
           <div className={styles.divInput}>
             <label>Existem quantos militares na sua escala ?</label>
-            <input 
-              type="number" 
-              name="quantity" 
-              onChange={(event) => setQuantity(event.target.value)} 
+            <input
+              type="number"
+              name="quantity"
+              onChange={(event) => setQuantity(event.target.value)}
               placeholder="Inclusive você"
             />
           </div>
@@ -89,13 +104,20 @@ export default function Home() {
         <h3>Informações importantes</h3>
 
         <ul>
-          <li>Na informações sobre quantidade de militares em sua escala, 
+          <li>
+            Na informações sobre quantidade de militares em sua escala,
             a pessoa que está preenchendo deve incluir a si próprio na contagem.
           </li>
+
           <li>
-            Não coloque seu último serviço incompatível com a escala que você deseja saber, 
-            ou seja, não é possível colocar uma data de final de semana e pedir para calcular 
+            Não coloque seu último serviço incompatível com a escala que você deseja saber,
+            ou seja, não é possível colocar uma data de final de semana e pedir para calcular
             a escala preta e vice-versa.
+          </li>
+
+          <li>
+            A aplicação considera feriados nacionais e estaduais que possuem data fixa, ou seja,
+            não considera feriados que são a "10ª quinta-feira após o feriado X".
           </li>
         </ul>
 
