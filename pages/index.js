@@ -84,6 +84,22 @@ export default function Home() {
         {!!nextService && <p className={styles.response}>{nextService}</p>}
 
       </main>
+
+      <section className={styles.section}>
+        <h3>Informações importantes</h3>
+
+        <ul>
+          <li>Na informações sobre quantidade de militares em sua escala, 
+            a pessoa que está preenchendo deve incluir a si próprio na contagem.
+          </li>
+          <li>
+            Não coloque seu último serviço incompatível com a escala que você deseja saber, 
+            ou seja, não é possível colocar uma data de final de semana e pedir para calcular 
+            a escala preta e vice-versa.
+          </li>
+        </ul>
+
+      </section>
     </>
   );
 }
