@@ -1,7 +1,9 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import ufs from '../utils/ufs.json';
+import { ServiceItem } from './components/ServiceItem';
+import { Warnings } from './components/Warnings';
 import styles from './home.module.scss';
 
 export default function Home() {
@@ -12,6 +14,17 @@ export default function Home() {
   const [scale, setScale] = useState('');
   const [nextService, setNextService] = useState('');
   const [screenState, setScreenState] = useState(false);
+
+  const [servicesLocalStorage, setServicesLocalStorage] = useState([]);
+
+  useEffect(() => {
+    const servicesStoraged = localStorage.getItem('@calc-sv');
+    const servicesStoragedFormatted = JSON.parse(servicesStoraged);
+
+    if (servicesStoraged) {
+      setServicesLocalStorage(servicesStoragedFormatted);
+    }
+  }, [])
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -32,11 +45,28 @@ export default function Home() {
 
     const response = await api.post('calculator', data);
 
+    const serviceReponse = response.data.response;
+
+
     setTimeout(() => {
       setNextService(response.data.response);
 
       setScreenState(false);
+
+      localStorage.setItem('@calc-sv', JSON.stringify([...servicesLocalStorage, serviceReponse]));
+      setServicesLocalStorage([...servicesLocalStorage, serviceReponse]);
     }, 3000)
+  }
+
+  function handleExcludeService(serviceToExclude) {
+    const servicesLocalStorageFiltered = servicesLocalStorage.filter((service, index) => {
+      if(index !== serviceToExclude) {
+        return service;
+      }
+    });
+
+    localStorage.setItem('@calc-sv', JSON.stringify(servicesLocalStorageFiltered));
+    setServicesLocalStorage(servicesLocalStorageFiltered);
   }
 
   return (
@@ -101,27 +131,17 @@ export default function Home() {
       </main>
 
       <section className={styles.section}>
-        <h3>Informações importantes</h3>
+        <h3>Serviços calculados</h3>
 
-        <ul>
-          <li>
-            Na informações sobre quantidade de militares em sua escala,
-            a pessoa que está preenchendo deve incluir a si próprio na contagem.
-          </li>
+        {servicesLocalStorage == '' && <p>Não há serviços calculados</p>}
 
-          <li>
-            Não coloque seu último serviço incompatível com a escala que você deseja saber,
-            ou seja, não é possível colocar uma data de final de semana e pedir para calcular
-            a escala preta e vice-versa.
-          </li>
-
-          <li>
-            A aplicação considera feriados nacionais e estaduais que possuem data fixa, ou seja,
-            não considera feriados que são a "10ª quinta-feira após o feriado X".
-          </li>
-        </ul>
+        {servicesLocalStorage.map((service, index) => (
+          <ServiceItem key={`${index}/${service}`} order={index + 1} date={service} onClick={() => handleExcludeService(index)}/>
+        ))}
 
       </section>
+
+      <Warnings />
     </>
   );
 }
