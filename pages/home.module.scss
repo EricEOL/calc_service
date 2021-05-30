@@ -218,6 +218,14 @@
   margin-top: 10px;
   padding: 8px 0 12px 0;
 
+  p {
+    font-size: 12px;
+
+    @media(min-width: 780px) {
+      font-size: 14px;
+    }
+  }
+
   @media(min-width: 780px) {
     width: 600px;
     border-radius: 0 0 8px 8px;

@@ -133,7 +133,7 @@ export default function Home() {
       <section className={styles.section}>
         <h3>Serviços calculados</h3>
 
-        {servicesLocalStorage == '' && <p>Não há serviços calculados</p>}
+        {servicesLocalStorage == '' && <p>Ainda não há serviços calculados</p>}
 
         {servicesLocalStorage.map((service, index) => (
           <ServiceItem key={`${index}/${service}`} order={index + 1} date={service} onClick={() => handleExcludeService(index)}/>
