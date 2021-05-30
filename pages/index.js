@@ -2,8 +2,8 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import ufs from '../utils/ufs.json';
-import { ServiceItem } from './components/ServiceItem';
-import { Warnings } from './components/Warnings';
+import { ServiceItem } from '../components/ServiceItem';
+import { Warnings } from '../components/Warnings';
 import styles from './home.module.scss';
 
 export default function Home() {
