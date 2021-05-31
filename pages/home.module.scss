@@ -44,7 +44,19 @@
     text-align: center;
     font-weight: bold;
     font-size: 16px;
+    width: 70vw;
+    padding: 4px;
+    border-radius: 4px;
+    background-color: rgb(240, 240, 240);
+  }
+
+  .error {
+    margin: 5px auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
     width: 95vw;
+    color: red;
   }
 
   @mixin inline-animation($duration) {

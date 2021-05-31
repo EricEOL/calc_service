@@ -2,9 +2,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-direction: column;
 
   width: 90%;
-  height: 35px;
   margin: 0 auto;
   padding: 4px;
 
@@ -12,23 +12,133 @@
   background: #fff;
   margin-bottom: 5px;
 
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    span {
+      font-size: 12px;
+      margin-left: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    strong {
+      font-size: 14px;
+      color: #333;
+      width: 210px;
+      text-align: left;
+    }
+
+    button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+
+      border-radius: 50%;
+
+      transition: 0.2s;
+
+      &:hover {
+        background-color: rgb(240, 240, 240);
+      }
+    }
+  }
+}
+
+@mixin dropdown-animation() {
+  $name: dropdown-#{unique-id()};
+
+  @keyframes #{$name} {
+    @content;
+  }
+
+  animation: $name 0.5s linear forwards;
+  transform-origin: top center;
+}
+
+.dropdownInformationsShow {
+  @include dropdown-animation() {
+    0% {
+      height: 0;
+      opacity: 0;
+      transform: rotateX(-90deg);
+    }
+    50% {
+      transform: rotateX(-20deg);
+    }
+    100% {
+      height: 90px;
+      opacity: 1;
+      transform: rotateX(0deg);
+    }
+  }
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  width: 90%;
+  margin: 0 auto;
+  padding: 4px;
+
+  margin-top: -4px;
+  margin-bottom: 4px;
+  border-radius: 0 0 4px 4px;
+
+  background-color: rgb(224, 224, 224);
+
   span {
-    font-size: 12px;
-    margin-left: 10px;
-    font-weight: bold;
-    color: #333;
-  }
-
-  strong {
-    font-size: 14px;
-    color: #333;
-    width: 210px;
     text-align: left;
+    font-size: 14px;
+    display: block;
+  }
+}
+
+@mixin dropup-animation() {
+  $name: dropup-#{unique-id()};
+
+  @keyframes #{$name} {
+    @content;
   }
 
-  button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
+  animation: $name 0.5s linear forwards;
+  transform-origin: top center;
+}
+
+.dropdownInformationsHidden {
+  @include dropup-animation() {
+    0% {
+      height: 90px;
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      height: 0;
+      opacity: 0;
+      display: none;
+    }
+  }
+
+  width: 90%;
+  margin: 0 auto;
+  padding: 4px;
+
+  margin-top: -4px;
+  border-radius: 0 0 4px 4px;
+
+  background-color: rgb(224, 224, 224);
+
+  span {
+    text-align: left;
+    font-size: 14px;
+    display: block;
   }
 }

@@ -14,6 +14,7 @@ export default function Home() {
   const [scale, setScale] = useState('');
   const [nextService, setNextService] = useState('');
   const [screenState, setScreenState] = useState(false);
+  const [error, setError] = useState('');
 
   const [servicesLocalStorage, setServicesLocalStorage] = useState([]);
 
@@ -43,24 +44,38 @@ export default function Home() {
       scale
     }
 
-    const response = await api.post('calculator', data);
 
-    const serviceReponse = response.data.response;
+    try {
 
+      const response = await api.post('calculator', data);
+      const serviceReponse = response.data.response;
 
-    setTimeout(() => {
-      setNextService(response.data.response);
+      setTimeout(() => {
+        setNextService(response.data.response.calculatedNextService);
+  
+        setScreenState(false);
+  
+        localStorage.setItem('@calc-sv', JSON.stringify([...servicesLocalStorage, serviceReponse]));
+        setServicesLocalStorage([...servicesLocalStorage, serviceReponse]);
 
-      setScreenState(false);
+        setError('');
+      }, 3000)
 
-      localStorage.setItem('@calc-sv', JSON.stringify([...servicesLocalStorage, serviceReponse]));
-      setServicesLocalStorage([...servicesLocalStorage, serviceReponse]);
-    }, 3000)
+    } catch(err) {
+
+      setTimeout(() => {
+        setScreenState(false);
+        setError(err.response.data.error);
+        setNextService('');
+      }, 3000)
+
+    }
   }
 
   function handleExcludeService(serviceToExclude) {
+    console.log(serviceToExclude);
     const servicesLocalStorageFiltered = servicesLocalStorage.filter((service, index) => {
-      if(index !== serviceToExclude) {
+      if (index !== serviceToExclude) {
         return service;
       }
     });
@@ -126,6 +141,8 @@ export default function Home() {
 
         {!!screenState && <div className={styles.loading}></div>}
 
+        {!!error && <p className={styles.error}>{error}</p>}
+
         {!!nextService && <p className={styles.response}>{nextService}</p>}
 
       </main>
@@ -136,7 +153,15 @@ export default function Home() {
         {servicesLocalStorage == '' && <p>Ainda não há serviços calculados</p>}
 
         {servicesLocalStorage.map((service, index) => (
-          <ServiceItem key={`${index}/${service}`} order={index + 1} date={service} onClick={() => handleExcludeService(index)}/>
+          <ServiceItem
+            key={`${index}/${service.calculatedNextService}`}
+            serviceCalculated={service.calculatedNextService}
+            lastService={service.date}
+            scale={service.scale}
+            quantity={service.quantity}
+            state={service.state}
+            onClick={() => handleExcludeService(index)}
+          />
         ))}
 
       </section>

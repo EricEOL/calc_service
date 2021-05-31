@@ -43,7 +43,7 @@ export default async (req, res) => {
     if (scale === 'preta') {
 
       if (isSaturday(formattedDate) === true || isSunday(formattedDate) === true || isHoliday(formattedDate) === true) {
-        res.json({ response: 'Você escolheu escala preta, entretanto, a data do seu último serviço foi um sábado, domingo ou feriado.' });
+        res.status(400).json({ error: 'Você escolheu escala preta, entretanto, a data do seu último serviço foi um sábado, domingo ou feriado.' });
         return;
       }
 
@@ -67,14 +67,22 @@ export default async (req, res) => {
         workingDays = workingDays - 1;
       }
 
-      const response = format(nextService, 'dd/MM/yyyy - (EEEE)', { locale: localePtBr });
+      const calculatedNextService = format(nextService, 'dd/MM/yyyy - (EEEE)', { locale: localePtBr });
 
-      res.json({ response });
+      res.json({ 
+        response: {
+          calculatedNextService,
+          date: format(formattedDate, 'dd/MM/yyyy - (EEEE)', { locale: localePtBr }),
+          scale,
+          quantity,
+          state
+        } 
+      });
 
     } else {
 
       if (isSaturday(formattedDate) === false && isSunday(formattedDate) === false && isHoliday(formattedDate) === false) {
-        res.json({ response: 'Você escolheu escala vermelha, entretanto, a data do seu último serviço foi um dia útil.' });
+        res.status(400).json({ error: 'Você escolheu escala vermelha, entretanto, a data do seu último serviço foi um dia útil.' });
         return;
       }
 
@@ -96,9 +104,17 @@ export default async (req, res) => {
         weekendDays = weekendDays;
       }
 
-      const response = format(nextService, 'dd/MM/yyyy - (EEEE)', { locale: localePtBr });
+      const calculatedNextService = format(nextService, 'dd/MM/yyyy - (EEEE)', { locale: localePtBr });
 
-      res.json({ response })
+      res.json({ 
+        response: {
+          calculatedNextService,
+          date: format(formattedDate, 'dd/MM/yyyy - (EEEE)', { locale: localePtBr }),
+          scale,
+          quantity,
+          state
+        } 
+      });
     }
 
   } else {
