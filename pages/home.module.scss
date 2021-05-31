@@ -48,15 +48,23 @@
     padding: 4px;
     border-radius: 4px;
     background-color: rgb(240, 240, 240);
+
+    @media(min-width: 780px) {
+      width: 400px;
+    }
   }
 
   .error {
     margin: 5px auto;
     text-align: center;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     width: 95vw;
     color: red;
+
+    @media(min-width: 780px) {
+      width: 600px;
+    }
   }
 
   @mixin inline-animation($duration) {

@@ -31,7 +31,7 @@ export default function Home() {
     event.preventDefault();
 
     if ((date === '') || (quantity === '') || (scale === '') || (state === '')) {
-      setNextService('Você não preencheu todos os campos.');
+      setError('Você não preencheu todos os campos.');
       return;
     }
 
