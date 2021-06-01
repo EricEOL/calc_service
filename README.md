@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/EricEOL/administrex/blob/main/public/logo-whole.png" />
+  <img src="https://github.com/EricEOL/calc_service/blob/main/readme/logo.png" />
 </p>
 
 ## Calculadora de Serviço
