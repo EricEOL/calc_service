@@ -49,6 +49,7 @@ export default function Home() {
 
       const response = await api.post('calculator', data);
       const serviceReponse = response.data.response;
+      console.log(serviceReponse.simulations);
 
       setTimeout(() => {
         setNextService(response.data.response.calculatedNextService);

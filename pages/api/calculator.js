@@ -19,7 +19,7 @@ export default async (req, res) => {
         date: `${holiday.date}/2021`
       }
     });
-    
+
     const stateHolidaysFormatted = stateHolidays.map(holiday => {
       return {
         date: `${holiday.date}/2021`
@@ -52,7 +52,9 @@ export default async (req, res) => {
         days: -1
       })
 
-      //326773878449
+      // TESTE DE SIMULAÇÃO
+      let simulationsCounter = 4;
+      let simulations = [];
 
       while (workingDays >= 0) {
 
@@ -60,23 +62,57 @@ export default async (req, res) => {
           days: 1
         })
 
-        if (isSaturday(nextService) === true || isSunday(nextService) === true || isHoliday(nextService) === true ) {
+        if (isSaturday(nextService) === true || isSunday(nextService) === true || isHoliday(nextService) === true) {
           workingDays = workingDays + 1;
         }
 
         workingDays = workingDays - 1;
       }
 
+      simulations.push(nextService);
+
       const calculatedNextService = format(nextService, 'dd/MM/yyyy - (EEEE)', { locale: localePtBr });
 
-      res.json({ 
+      for (let i = 0; i < simulationsCounter; i++) {
+
+        let dateArrayPosition = simulations[i];
+
+        dateArrayPosition = add(dateArrayPosition, {
+          days: -1
+        })
+
+        workingDays = Number(quantity);
+
+        while (workingDays >= 0) {
+
+          dateArrayPosition = add(dateArrayPosition, {
+            days: 1
+          })
+
+          if (isSaturday(dateArrayPosition) === true || isSunday(dateArrayPosition) === true || isHoliday(dateArrayPosition) === true) {
+            workingDays = workingDays + 1;
+          }
+
+          workingDays = workingDays - 1;
+
+        }
+
+        simulations.push(dateArrayPosition);
+      }
+
+      simulations = simulations.map(simulation => {
+        return format(simulation, 'dd-MMMyy-eee', { locale: localePtBr });
+      })
+
+      res.json({
         response: {
           calculatedNextService,
           date: format(formattedDate, 'dd/MM/yyyy - (EEEE)', { locale: localePtBr }),
           scale,
           quantity,
-          state
-        } 
+          state,
+          simulations
+        }
       });
 
     } else {
@@ -91,6 +127,9 @@ export default async (req, res) => {
         days: -1
       })
 
+      let simulationsCounter = 4;
+      let simulations = [];
+
       while (weekendDays >= 0) {
 
         nextService = add(nextService, {
@@ -104,16 +143,50 @@ export default async (req, res) => {
         weekendDays = weekendDays;
       }
 
+      simulations.push(nextService);
+
       const calculatedNextService = format(nextService, 'dd/MM/yyyy - (EEEE)', { locale: localePtBr });
 
-      res.json({ 
+      for (let i = 0; i < simulationsCounter; i++) {
+
+        let dateArrayPosition = simulations[i];
+
+        dateArrayPosition = add(dateArrayPosition, {
+          days: -1
+        })
+
+        weekendDays = Number(quantity);
+
+        while (weekendDays >= 0) {
+
+          dateArrayPosition = add(dateArrayPosition, {
+            days: 1
+          })
+
+          if (isSaturday(dateArrayPosition) === true || isSunday(dateArrayPosition) === true || isHoliday(dateArrayPosition) === true) {
+            weekendDays = weekendDays - 1;
+          }
+  
+          weekendDays = weekendDays;
+
+        }
+
+        simulations.push(dateArrayPosition);
+      }
+
+      simulations = simulations.map(simulation => {
+        return format(simulation, 'dd-MMMyy-eee', { locale: localePtBr });
+      })
+
+      res.json({
         response: {
           calculatedNextService,
           date: format(formattedDate, 'dd/MM/yyyy - (EEEE)', { locale: localePtBr }),
           scale,
           quantity,
-          state
-        } 
+          state,
+          simulations
+        }
       });
     }
 
