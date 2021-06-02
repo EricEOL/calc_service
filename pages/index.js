@@ -5,6 +5,7 @@ import ufs from '../utils/ufs.json';
 import { ServiceItem } from '../components/ServiceItem';
 import { Warnings } from '../components/Warnings';
 import styles from './home.module.scss';
+import { Simulations } from '../components/Simulations';
 
 export default function Home() {
 
@@ -13,6 +14,7 @@ export default function Home() {
   const [quantity, setQuantity] = useState('');
   const [scale, setScale] = useState('');
   const [nextService, setNextService] = useState('');
+  const [simulations, setSimulations] = useState([]);
   const [screenState, setScreenState] = useState(false);
   const [error, setError] = useState('');
 
@@ -44,25 +46,24 @@ export default function Home() {
       scale
     }
 
-
     try {
 
       const response = await api.post('calculator', data);
       const serviceReponse = response.data.response;
-      console.log(serviceReponse.simulations);
 
       setTimeout(() => {
         setNextService(response.data.response.calculatedNextService);
-  
+        setSimulations(response.data.response.simulations);
+
         setScreenState(false);
-  
+
         localStorage.setItem('@calc-sv', JSON.stringify([...servicesLocalStorage, serviceReponse]));
         setServicesLocalStorage([...servicesLocalStorage, serviceReponse]);
 
         setError('');
       }, 3000)
 
-    } catch(err) {
+    } catch (err) {
 
       setTimeout(() => {
         setScreenState(false);
@@ -147,6 +148,24 @@ export default function Home() {
         {!!nextService && <p className={styles.response}>{nextService}</p>}
 
       </main>
+
+      <section className={styles.simulationsSection}>
+
+        <h3>Simulações dos próximos 5 serviços</h3>
+
+        <div>
+
+          {!nextService && <p>Aguardando para realizar simulações</p>}
+
+          {!!nextService && simulations.map(simulation => {
+
+            const [numberDay, monthAndYear, weekDay] = simulation.split('-');
+
+            return <Simulations weekDay={weekDay} numberDay={numberDay} monthAndYear={monthAndYear} />
+          })}
+        </div>
+
+      </section>
 
       <section className={styles.section}>
         <h3>Serviços calculados</h3>

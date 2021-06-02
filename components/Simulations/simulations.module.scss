@@ -1,0 +1,29 @@
+.simulationContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60px;
+  border-radius: 4px;
+  background-color: #EEFBF6;
+  padding-bottom: 4px;
+
+  .weekDay {
+    width: 100%;
+    text-align: center;
+    background-color: #3d524c;
+    border-radius: 4px 4px 0 0;
+    color: #fff;
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 2px 0 2px 0;
+  }
+
+  strong {
+    font-size: 24px;
+  }
+
+  .monthAndYear {
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+}

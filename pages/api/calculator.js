@@ -52,7 +52,6 @@ export default async (req, res) => {
         days: -1
       })
 
-      // TESTE DE SIMULAÇÃO
       let simulationsCounter = 4;
       let simulations = [];
 
