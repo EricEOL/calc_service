@@ -4,7 +4,7 @@
 
 ## Calculadora de Serviço
  
-Aplicação que realiza simulação de datas dos próximos serviços de um militar ou pessoa que trabalhe com serviço de escala.
+Aplicação que realiza simulação de datas dos próximos serviços de um militar ou pessoa que trabalhe com serviço de escala, ou seja, auxilia as pessoas a se programarem em suas ocupações e possíveis trocas de serviço. 
 
 - Aplicação criada seguindo o princípio *Mobile First*.
  
